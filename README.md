@@ -1,16 +1,16 @@
 Docker Nginx Proxy with Let's Encrypt
 =====================================
 
-![GitHub Release Version](https://img.shields.io/github/release/annixa/docker-nginx-letsencrypt-proxy.svg)
-![Docker Hub Pulls](https://img.shields.io/docker/pulls/annixa/docker-nginx-letsencrypt-proxy.svg)
-![Docker Hub Stars](https://img.shields.io/docker/stars/annixa/docker-nginx-letsencrypt-proxy.svg)
-![GitHub Open Issues](https://img.shields.io/github/issues/annixa/docker-nginx-letsencrypt-proxy.svg)
+![GitHub Release Version](https://img.shields.io/github/release/qodfathr/docker-nginx-letsencrypt-proxy.svg)
+![Docker Hub Pulls](https://img.shields.io/docker/pulls/qodfathr/docker-nginx-letsencrypt-proxy.svg)
+![Docker Hub Stars](https://img.shields.io/docker/stars/qodfathr/docker-nginx-letsencrypt-proxy.svg)
+![GitHub Open Issues](https://img.shields.io/github/issues/qodfathr/docker-nginx-letsencrypt-proxy.svg)
 
 Docker Nginx Proxy with Let's Encrypt simplifies application integration with Let's Encrypt.
 
 This project provides a simple nginx configuration and auto-updating Let's Encrypt for integration with existing services.
 
-Docker Hub image: [docker-nginx-letsencrypt-proxy](https://hub.docker.com/r/annixa/docker-nginx-letsencrypt-proxy/)
+Docker Hub image: [docker-nginx-letsencrypt-proxy](https://hub.docker.com/r/qodfathr/docker-nginx-letsencrypt-proxy/)
 
 Quick Deploy (`docker-compose.yml`)
 -----------------------------------
@@ -54,7 +54,7 @@ The following docker environment variables are required for proper usage:
   - See [https://community.letsencrypt.org/t/rate-limits-for-lets-encrypt/6769](https://community.letsencrypt.org/t/rate-limits-for-lets-encrypt/6769) for more information.
 - `TLS_SETTING` (optional), one of `MODERN`, `INTERMEDIATE`, OR `OLD`. All other values will be igored. `MODERN` is default to allow for the best security setting.
   - See [https://wiki.mozilla.org/Security/Server_Side_TLS](https://wiki.mozilla.org/Security/Server_Side_TLS) for more details
-  - See [docker-entrypoint.sh](https://github.com/Annixa/docker-nginx-letsencrypt-proxy/blob/master/docker-entrypoint.sh) for the suites used
+  - See [docker-entrypoint.sh](https://github.com/qodfathr/docker-nginx-letsencrypt-proxy/docker-entrypoint.sh) for the suites used
   - Updated August 6, 2017
   - This setting will correspond to the following browser compatibilities:
 - `LOGROTATE_SIZE` (optional, defaults to 10k), the size limit of the log files
