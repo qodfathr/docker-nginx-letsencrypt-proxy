@@ -122,6 +122,8 @@ else
 		if [ "$REDIRECT_WWW_TO_ROOT" = true ]; then
 			echo "Adding www redirect for $i"
 			echo "server {" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "  listen 443 ssl http2;" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "  listen [::]:443 ssl http2;" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "  server_name www.$i;" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "  return 301 \$scheme://$i\$request_uri;" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "}" >> /etc/nginx/sites-enabled/webapp.conf
