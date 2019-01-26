@@ -113,6 +113,10 @@ else
 		echo "ssl_ciphers '${TLS_SETTING_CIPHER["$TLS_SETTING"]}';" >> /etc/nginx/sites-enabled/webapp.conf
 
 		echo "server_name $i;" >> /etc/nginx/sites-enabled/webapp.conf
+
+                echo "location ~ /\.git {" >> /etc/nginx/sites-enabled/webapp.conf
+		echo "  deny all;" >> /etc/nginx/sites-enabled/webapp.conf
+		echo "}" >> /etc/nginx/sites-enabled/webapp.conf
 		echo "location / {" >> /etc/nginx/sites-enabled/webapp.conf
 
 
