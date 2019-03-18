@@ -7,7 +7,7 @@ RUN pip3 install virtualenv>=15.1.0
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 COPY letsencrypt-run.sh /opt
-RUN chmod +x /opt/letsencript-run.sh
+RUN chmod +x /opt/letsencrypt-run.sh
 COPY wellknown.conf /etc/nginx/sites-available
 COPY webapp.2.conf /etc/nginx/sites-available
 
