@@ -128,7 +128,6 @@ else
 			echo "location /auth {" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "        proxy_pass          http://keycloak;" >> /etc/nginx/sites-enabled/webapp.conf
                         envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
-			echo "}" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
 		fi
 
