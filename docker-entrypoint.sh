@@ -134,6 +134,7 @@ else
 		echo "location / {" >> /etc/nginx/sites-enabled/webapp.conf
 		echo "        proxy_pass          $THIS_DEST;" >> /etc/nginx/sites-enabled/webapp.conf
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
+		echo "}"
 		
 		if [ "$REDIRECT_WWW_TO_ROOT" = true ]; then
 			echo "Adding www redirect for $i"
