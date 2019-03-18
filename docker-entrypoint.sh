@@ -44,6 +44,7 @@ else
 	IFS=',' read -ra DOMAINS <<< "$LE_DOMAIN"
 	IFS=',' read -ra DESTINATIONS <<< "$PROXY_DEST"
 	IFS="," read -ra WWWREDIRECTS <<< "$WWW_REDIRECT"
+	IFS="," read -ra KEYCLOAK <<< "$KEYCLOAK"
 
 	openssl req -passout pass: -subj "/C=US/ST=CA/L=San Diego/O=$DOMAINS/OU=TS/CN=$DOMAINS/emailAddress=support@$DOMAINS" -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
 
@@ -107,6 +108,11 @@ else
 		if [ $CT -lt ${#WWWREDIRECTS[@]} ]; then
 			REDIRECT_WWW_TO_ROOT="${WWWREDIRECTS[$CT]}"
 		fi
+		KEYCLOAK_ON_AUTH=false
+		if [ $CT -lt ${#KEYCLOAK[@]} ]; then
+			KEYCLOAK_ON_AUTH="${KEYCLOAK[$CT]}"
+		fi
+
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.1.conf >> /etc/nginx/sites-enabled/webapp.conf
 
 		echo "ssl_protocols	${TLS_SETTING_PROTOS["$TLS_SETTING"]};" >> /etc/nginx/sites-enabled/webapp.conf
@@ -117,9 +123,16 @@ else
                 echo "location ~ /\.git {" >> /etc/nginx/sites-enabled/webapp.conf
 		echo "  deny all;" >> /etc/nginx/sites-enabled/webapp.conf
 		echo "}" >> /etc/nginx/sites-enabled/webapp.conf
+
+		if [ "$KEYCLOAK_ON_AUTH" = true ]; then
+			echo "location /auth {" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "        proxy_pass          http://keycloak;" >> /etc/nginx/sites-enabled/webapp.conf
+                        envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
+			echo "}" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "" >> /etc/nginx/sites-enabled/webapp.conf
+		fi
+
 		echo "location / {" >> /etc/nginx/sites-enabled/webapp.conf
-
-
 		echo "        proxy_pass          $THIS_DEST;" >> /etc/nginx/sites-enabled/webapp.conf
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 		
