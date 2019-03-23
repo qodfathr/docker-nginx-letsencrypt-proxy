@@ -8,6 +8,7 @@ COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 COPY letsencrypt-run.sh /opt
 RUN chmod +x /opt/letsencrypt-run.sh
+COPY nginx.conf /etc/nginx
 COPY wellknown.conf /etc/nginx/sites-available
 COPY webapp.2.conf /etc/nginx/sites-available
 
