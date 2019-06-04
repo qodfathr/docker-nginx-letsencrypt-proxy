@@ -126,7 +126,7 @@ else
 
 		if [ "$KEYCLOAK_ON_AUTH" = true ]; then
 			echo "location /auth/realms/Lyfevest/lvapi {" >> /etc/nginx/sites-enabled/webapp.conf
-			echo "        proxy_pass          http://lyfevestapi.daxat.local:3000/api;" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "        proxy_pass          http://lyfevestapi.daxat.local/api;" >> /etc/nginx/sites-enabled/webapp.conf
 			envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "location /auth {" >> /etc/nginx/sites-enabled/webapp.conf
