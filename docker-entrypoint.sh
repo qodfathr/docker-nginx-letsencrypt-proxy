@@ -96,6 +96,20 @@ else
 	# Updating to support changes in LE
 	envsubst '$PROXY_PORT_FWD' < /etc/nginx/sites-available/wellknown.conf > /etc/nginx/sites-enabled/webapp.conf
 
+	if [ -z "$KEYCLOAK_URL" ]; then
+		echo "KEYCLOAK_URL not set. Using http://keycloak";
+		KEYCLOAK_URL="http://keycloak";
+	else
+		echo "Using Keycloak $KEYCLOAK_URL";
+	fi
+
+	if [ -z "$LYFEVEST_API_URL" ]; then
+		echo "LYFEVEST_API_URL not set. Using http;//lyfevestapi.daxat.local/api";
+		LYFEVEST_API_URL="http://lyfevestapi.daxat.local/api";
+	else
+		echo "Using Lyfevest API $LYFEVEST_API_URL";
+	fi
+
 	CT=0
 	for i in "${DOMAINS[@]}"; do
 		# By default, grab the first PROXY_DEST in the array
@@ -126,11 +140,11 @@ else
 
 		if [ "$KEYCLOAK_ON_AUTH" = true ]; then
 			echo "location /auth/realms/Lyfevest/lvapi {" >> /etc/nginx/sites-enabled/webapp.conf
-			echo "        proxy_pass          http://lyfevestapi.daxat.local/api;" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "        proxy_pass          $LYFEVEST_API_URL;" >> /etc/nginx/sites-enabled/webapp.conf
 			envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "location /auth {" >> /etc/nginx/sites-enabled/webapp.conf
-			echo "        proxy_pass          http://keycloak;" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "        proxy_pass          $KEYCLOAK_URL;" >> /etc/nginx/sites-enabled/webapp.conf
                         envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
 		fi
