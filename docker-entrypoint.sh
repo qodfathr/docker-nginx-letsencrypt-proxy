@@ -45,6 +45,7 @@ else
 	IFS=',' read -ra DESTINATIONS <<< "$PROXY_DEST"
 	IFS="," read -ra WWWREDIRECTS <<< "$WWW_REDIRECT"
 	IFS="," read -ra KEYCLOAK <<< "$KEYCLOAK"
+	IFS="," read -ra REALMS <<< "$REALMS"
 
 	openssl req -passout pass: -subj "/C=US/ST=CA/L=San Diego/O=$DOMAINS/OU=TS/CN=$DOMAINS/emailAddress=support@$DOMAINS" -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
 
@@ -125,6 +126,7 @@ else
 		KEYCLOAK_ON_AUTH=false
 		if [ $CT -lt ${#KEYCLOAK[@]} ]; then
 			KEYCLOAK_ON_AUTH="${KEYCLOAK[$CT]}"
+			REALM="${REALMS[$CT]}"
 		fi
 
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.1.conf >> /etc/nginx/sites-enabled/webapp.conf
@@ -139,7 +141,7 @@ else
 		echo "}" >> /etc/nginx/sites-enabled/webapp.conf
 
 		if [ "$KEYCLOAK_ON_AUTH" = true ]; then
-			echo "location /auth/realms/Lyfevest/lvapi {" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "location /auth/realms/$REALM/lvapi {" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "        proxy_pass          $LYFEVEST_API_URL;" >> /etc/nginx/sites-enabled/webapp.conf
 			envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
