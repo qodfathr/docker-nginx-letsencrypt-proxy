@@ -164,7 +164,7 @@ else
 			echo "        error_page 404 = @handler_404;" >> /etc/nginx/sites-enabled/webapp.conf
 		fi
 		echo "}" >> /etc/nginx/sites-enabled/webapp.conf
-		if [ "$APPEND_ERRORINTERCEPT" = true]; then
+		if [ "$APPEND_ERRORINTERCEPT" = true ]; then
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "location @handler_404 {" >> /etc/nginx/sites-enabled/webapp.conf
   		echo "        proxy_pass          $THIS_DEST/;" >> /etc/nginx/sites-enabled/webapp.conf
