@@ -158,11 +158,12 @@ else
 
 		echo "location / {" >> /etc/nginx/sites-enabled/webapp.conf
 		echo "        proxy_pass          $THIS_DEST;" >> /etc/nginx/sites-enabled/webapp.conf
-		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 		if [ "$APPEND_ERRORINTERCEPT" = true ]; then
 			echo "        proxy_intercept_errors on;" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "        error_page 404 = @handler_404;" >> /etc/nginx/sites-enabled/webapp.conf
 		fi
+		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
+
 		if [ "$APPEND_ERRORINTERCEPT" = true ]; then
 			echo "" >> /etc/nginx/sites-enabled/webapp.conf
 			echo "location @handler_404 {" >> /etc/nginx/sites-enabled/webapp.conf
