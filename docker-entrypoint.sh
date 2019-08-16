@@ -164,12 +164,6 @@ else
 		fi
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
 
-		if [ "$APPEND_ERRORINTERCEPT" = true ]; then
-			echo "" >> /etc/nginx/sites-enabled/webapp.conf
-			echo "location @handler_404 {" >> /etc/nginx/sites-enabled/webapp.conf
-  		echo "        rewrite ^         $THIS_DEST/index.html last;" >> /etc/nginx/sites-enabled/webapp.conf
-	  	echo "}" >> /etc/nginx/sites-enabled/webapp.conf
-		fi
 		echo "}" >> /etc/nginx/sites-enabled/webapp.conf
 		
 		if [ "$REDIRECT_WWW_TO_ROOT" = true ]; then
