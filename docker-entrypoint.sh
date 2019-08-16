@@ -46,6 +46,7 @@ else
 	IFS="," read -ra WWWREDIRECTS <<< "$WWW_REDIRECT"
 	IFS="," read -ra KEYCLOAK <<< "$KEYCLOAK"
 	IFS="," read -ra REALMS <<< "$REALMS"
+  IFS="," read -ra ERRORINTERCEPT <<< "$ERRORINTERCEPT"
 
 	openssl req -passout pass: -subj "/C=US/ST=CA/L=San Diego/O=$DOMAINS/OU=TS/CN=$DOMAINS/emailAddress=support@$DOMAINS" -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
 
@@ -128,6 +129,10 @@ else
 			KEYCLOAK_ON_AUTH="${KEYCLOAK[$CT]}"
 			REALM="${REALMS[$CT]}"
 		fi
+		APPEND_ERRORINTERCEPT=false
+		if [ $CT -lt ${#ERRORINTERCEPT[@]} ]; then
+			APPEND_ERRORINTERCEPT="${ERRORINTERCEPT[$CT]}"
+		fi
 
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.1.conf >> /etc/nginx/sites-enabled/webapp.conf
 
@@ -154,7 +159,18 @@ else
 		echo "location / {" >> /etc/nginx/sites-enabled/webapp.conf
 		echo "        proxy_pass          $THIS_DEST;" >> /etc/nginx/sites-enabled/webapp.conf
 		envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
+		if [ "$APPEND_ERRORINTERCEPT" = true]; then
+			echo "        proxy_intercept_errors on;" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "        error_page 404 = @handler_404;" >> /etc/nginx/sites-enabled/webapp.conf
+		fi
 		echo "}" >> /etc/nginx/sites-enabled/webapp.conf
+		if [ "$APPEND_ERRORINTERCEPT" = true]; then
+			echo "" >> /etc/nginx/sites-enabled/webapp.conf
+			echo "location @handler_404 {" >> /etc/nginx/sites-enabled/webapp.conf
+  		echo "        proxy_pass          $THIS_DEST/;" >> /etc/nginx/sites-enabled/webapp.conf
+	  	envsubst '$PROXY_PORT' < /etc/nginx/sites-available/webapp.2.conf >> /etc/nginx/sites-enabled/webapp.conf
+			echo "}" >> /etc/nginx/sites-enabled/webapp.conf
+		fi
 		
 		if [ "$REDIRECT_WWW_TO_ROOT" = true ]; then
 			echo "Adding www redirect for $i"
